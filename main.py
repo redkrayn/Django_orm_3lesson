@@ -27,10 +27,7 @@ def get_schoolkid(schoolkid):
 
 
 def fix_marks(schoolkid):
-    marks = Mark.objects.filter(schoolkid=schoolkid, points__in=[2, 3])
-    for mark in marks:
-        mark.points = 5
-        mark.save()
+    Mark.objects.filter(schoolkid=schoolkid, points__in=[2, 3]).update(points=5)
 
 
 def delete_chastisement(schoolkid):
@@ -54,10 +51,10 @@ def create_commendation(schoolkid, subject):
 
 def main():
     parser = argparse.ArgumentParser(description='Введите имя и предмет')
-    parser.add_argument('surname', help='Введите имя')
+    parser.add_argument('name', help='Введите имя')
     parser.add_argument('subject', help='Введите предмет')
     args = parser.parse_args()
-    schoolkid = args.surname.title()
+    schoolkid = args.name.title()
     subject = args.subject.title()
 
     try:
@@ -69,6 +66,8 @@ def main():
         exit('Не верный ввод, такой фамилии нет, попробуйте ещё раз')
     except Subject.DoesNotExist:
         exit('Не верный ввод, такого предмета нет, попробуйте ещё раз')
+    except Lesson.DoesNotExist:
+        exit('Не верный ввод, такого урока нет, попробуйте ещё раз')
     except Schoolkid.MultipleObjectsReturned:
         exit('Людей с такими именами несколько, введите фамилию и имя ученика через пробел')
 
