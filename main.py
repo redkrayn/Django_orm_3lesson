@@ -38,6 +38,8 @@ def delete_chastisement(schoolkid):
 def create_commendation(schoolkid, subject):
     subject = Subject.objects.get(title=subject, year_of_study=6)
     lesson = Lesson.objects.filter(year_of_study=6, group_letter='А', subject=subject).order_by('?').first()
+    if lesson is None:
+        exit('Такого урока в расписании нет, попробуйте ещё раз')
     text = random.choice(PRAISE)
     Commendation.objects.create(
         text=text,
@@ -66,8 +68,6 @@ def main():
         exit('Не верный ввод, такой фамилии нет, попробуйте ещё раз')
     except Subject.DoesNotExist:
         exit('Не верный ввод, такого предмета нет, попробуйте ещё раз')
-    except Lesson.DoesNotExist:
-        exit('Не верный ввод, такого урока нет, попробуйте ещё раз')
     except Schoolkid.MultipleObjectsReturned:
         exit('Людей с такими именами несколько, введите фамилию и имя ученика через пробел')
 
