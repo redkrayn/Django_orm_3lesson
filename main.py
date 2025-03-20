@@ -38,7 +38,7 @@ def delete_chastisement(schoolkid):
 def create_commendation(schoolkid, subject):
     subject = Subject.objects.get(title=subject, year_of_study=6)
     lesson = Lesson.objects.filter(year_of_study=6, group_letter='А', subject=subject).order_by('?').first()
-    if lesson is None:
+    if not lesson:
         exit('Такого урока в расписании нет, попробуйте ещё раз')
     text = random.choice(PRAISE)
     Commendation.objects.create(
